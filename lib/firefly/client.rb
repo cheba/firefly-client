@@ -27,9 +27,10 @@ module Firefly
     #       => { "http://google.com/" => "http://aj.gs/7dZ",
     #            "http://yahoo.com/"  => "http://aj.gs/8Yt" }
     def shorten(input)
-      if input.is_a?(String)
+      case input
+      when String, Hash
         return create_url(input)
-      elsif input.is_a?(Array)
+      when Array
         result = {}
         input.each do |inp|
           result[inp] = create_url(inp)
