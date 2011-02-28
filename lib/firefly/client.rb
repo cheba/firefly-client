@@ -45,7 +45,13 @@ module Firefly
     # Shortend +long_url+ and returns the short_url on success
     def create_url(long_url)
       begin
-        options = { :query => { :url => long_url, :api_key => @api_key } }
+        options = if long_url.is_a? Hash
+                    { :query => { :url => long_url.values.first,
+                                  :short => long_url.keys.first,
+                                  :api_key => @api_key } }
+                  else
+                    { :query => { :url => long_url, :api_key => @api_key } }
+                  end
         result = HTTParty.post(@firefly_url + '/api/add', options)
 
         if result =~ /Permission denied/i
